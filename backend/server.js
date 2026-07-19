@@ -443,6 +443,7 @@ let currentTunnel = null;
 async function startTunnel() {
   try {
     if (currentTunnel) {
+      currentTunnel.removeAllListeners(); // Prevent duplicate setTimeout loops
       currentTunnel.close();
     }
     
