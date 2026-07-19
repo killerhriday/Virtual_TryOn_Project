@@ -303,13 +303,21 @@ app.post('/api/generate', upload.single('clientImage'), async (req, res) => {
       contentType: 'image/jpeg'
     });
     
-    // Also grab the clothing picture from the frontend assets (assuming '001.jpeg')
-    const clothingImagePath = path.join(__dirname, '../frontend/src/assets/001.jpeg');
+    // Grab the corresponding clothing picture from the frontend assets
+    const filenameMap = {
+      '1': '001.jpeg',
+      '2': '002.png',
+      '3': '003.png',
+      '4': '004.png'
+    };
+    const clothingFileName = filenameMap[clothingItemId] || '001.jpeg';
+    const clothingImagePath = path.join(__dirname, '../frontend/src/assets', clothingFileName);
+    
     if (fs.existsSync(clothingImagePath)) {
       const clothingBuffer = fs.readFileSync(clothingImagePath);
       formData.append('clothingImage', clothingBuffer, {
-        filename: '001.jpeg',
-        contentType: 'image/jpeg'
+        filename: clothingFileName,
+        contentType: clothingFileName.endsWith('.png') ? 'image/png' : 'image/jpeg'
       });
     }
 
